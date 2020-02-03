@@ -19,6 +19,9 @@ mkdir -p $DEPLOY_DIR/share
 rsync -ax $PREFIX/share/gdal $DEPLOY_DIR/share/
 rsync -ax $PREFIX/share/proj $DEPLOY_DIR/share/
 
+# copy all libs needed by ogr2ogr binary
+ldd /usr/local/bin/ogr2ogr | grep "=> /" | awk '{print $3}' | xargs -I '{}' cp -v '{}' $DEPLOY_DIR/lib/
+
 # zip up deploy package
 cd $DEPLOY_DIR
 zip -ruq ../lambda-deploy.zip ./
